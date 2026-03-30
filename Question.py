@@ -1,8 +1,4 @@
 
-
-from ast import List
-
-
 class Question:
     def __init__(self, id, title, description, user):
         self.id = id
@@ -12,6 +8,7 @@ class Question:
         self.answers = []
         self.votes = []
         self.comments = []
+        self.tags = [] 
 
     def get_id(self):
         return self.id
@@ -31,5 +28,7 @@ class Question:
     def add_comment(self, comment):
         self.comments.append(comment)
     
+    def add_tag(self, tag):
+        self.tags.append(tag)
 
   

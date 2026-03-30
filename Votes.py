@@ -25,4 +25,5 @@ class Vote:
     def get_vote_type(self):
         return self.vote_type
     
+    
 

@@ -1,6 +1,7 @@
 from Answer import Answer
 from Question import Question
 from User import User
+from Votes import Vote, VoteType
 from comments import Comment
 
 class StackOverflow:
@@ -8,10 +9,17 @@ class StackOverflow:
         self.users = []
         self.questions = []
         self.answers = []
+        self.user_questions = {}   # 
+        self.user_answer = {}      # user_id -> list of answers
+        self.question_description = {}  # question description -> answers
+        
 
     def post_question( self,  title, description, user):
         question_id =  len(self.questions) + 1
         question = Question(question_id, title, description, user)
+        if user not in self.user_questions:
+            self.user_questions[user] = []
+        self.user_questions[user].append(question)
         self.questions.append(question)
         return question
     
@@ -19,7 +27,15 @@ class StackOverflow:
         answer_id = len(self.answers) + 1
         answer = Answer(answer_id, description, user, question)
         self.answers.append(answer)
+
+        if question.description not in self.question_description:
+            self.question_description[question.description] = []
+        self.question_description[question.description].append(answer)
         question.add_answer(answer)
+
+        if user not in self.user_answer:
+            self.user_answer[user] = []
+        self.user_answer[user].append(answer)
         return answer
     
     def post_comment( self, description, user, target):
@@ -28,21 +44,31 @@ class StackOverflow:
         target.add_comment(comment)
         return comment
 
-#examples 
+    def get_highest_voted_answer(self):
+         if not self.answers:
+             return None
+         self.answers.sort(
+             key=lambda x: sum(1 if v.vote_type == VoteType.UPVOTE else -1 for v in x.votes),
+             reverse=True
+         )
+         return self.answers[0]
 
-stackoverflow = StackOverflow()
-user1 = User("user1", 1)
-stackoverflow.users.append(user1)
-user2 = User("user2", 2)
-stackoverflow.users.append(user2)
-question1 = stackoverflow.post_question("What is Python?", "I want to know about Python programming language.", user1)
-answer1 = stackoverflow.post_answer("Python is a high-level programming language.", user2, question1)
-
-comment1 = stackoverflow.post_comment("Thanks for the answer!", user1, answer1)
-print("Question:", question1.title)
-for ans in question1.answers:
-    print("Answer:", ans.description)
-    print("Answered by:", ans.user.get_name())
-    for com in ans.comments:
-        print("Comment:", com.description)
-        print("Commented by:", com.user.get_name())
+    def upvote(self, user, target):
+        vote_id = len(target.votes) + 1
+        vote = Vote(target, user, VoteType.UPVOTE, vote_id)
+        target.add_vote(vote)
+    
+    def downvote( self, user, target):
+        vote_id = len(target.votes) + 1
+        vote = Vote(target, user, VoteType.DOWNVOTE, vote_id)
+        target.add_vote(vote)
+    
+    def get_question_by_user(self, user):
+        return self.user_questions.get(user, [])
+    
+    def get_answer_by_user(self, user):
+        return self.user_answer.get(user, [])
+    
+    def get_answer_by_question_description(self, description):
+        return self.question_description.get(description, [])
+    
