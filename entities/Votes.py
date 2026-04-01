@@ -4,14 +4,12 @@ class VoteType(Enum):
     UPVOTE = 1
     DOWNVOTE = -1
 
-
-# 1 vote bas 1 hi jgah diya jaa sakta hai brooooo
 class Vote:
-    def __init__(self, target, user, vote_type, id ):
+    def __init__(self, id, user, vote_type: VoteType, target: Votable): 
         self.id = id
-        self.target = target
-        self.user = user
+        self.created_by = user
         self.vote_type = vote_type
+        self.target = target  # Votable type hoga — baad mein samjhega
 
     def get_id(self):
         return self.id
@@ -20,10 +18,7 @@ class Vote:
         return self.target
     
     def get_user(self):
-        return self.user
+        return self.created_by
     
     def get_vote_type(self):
         return self.vote_type
-    
-    
-

@@ -1,7 +1,7 @@
-from Answer import Answer
-from Question import Question
-from User import User
-from Votes import Vote, VoteType
+from entities.Answer import Answer
+from entities.Question import Question
+from entities.User import User
+from entities.Votes import Vote, VoteType
 from comments import Comment
 
 class StackOverflow:
