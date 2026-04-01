@@ -1,10 +1,8 @@
-
-
-from abc import abstractmethod
-
-from interfaces import Commentable
+from abc import ABC, abstractmethod
+from interfaces.Commentable import Commentable
 from interfaces.Votable import Votable
-class Post(Commentable, Votable):
+
+class Post(Commentable, Votable, ABC):
     def __init__(self, id, title, description, user):
         self.id = id
         self.title = title
@@ -12,6 +10,7 @@ class Post(Commentable, Votable):
         self.created_by = user
         self.comments = []
         self.votes = []
+        print(f"Post created: {self.__class__.__name__} id={self.id} title={self.title}")
 
     def add_comment(self, comment):
         self.comments.append(comment)
@@ -29,5 +28,6 @@ class Post(Commentable, Votable):
         return self.id
     
     @abstractmethod
-    def get_title(self):  # Question aur Answer override karenge
+    def get_title(self):
         pass
+

@@ -8,6 +8,9 @@ class Comment:
         self.target = target
         self.created_at = datetime.now()
 
+        target_id = getattr(target, 'id', None) or getattr(target, 'get_id', lambda: None)()
+        print(f"Comment created: id={self.id} target={target.__class__.__name__}(id={target_id}) by {self.created_by.get_name()}")
+
     def get_id(self):
         return self.id
     

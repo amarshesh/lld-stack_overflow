@@ -4,6 +4,7 @@ class User:
         self.name = name
         self.reputation = 0
         self.id = user_id  
+        print(f"User created: {self.name} (id={self.id})")
     
     def get_name(self):
         return self.name
