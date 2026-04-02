@@ -4,6 +4,7 @@ class User:
         self.name = name
         self.reputation = 0
         self.id = user_id  
+        print(f"User created: {self.name} (id={self.id})")
     
     def get_name(self):
         return self.name
@@ -14,10 +15,5 @@ class User:
     def get_id(self):
         return self.id
     
-    def increase_reputation(self):
-        rep = self.get_reputation() 
-        self.reputation = rep + 1
-        return self.reputation
-
-    
-    
+    def update_reputation(self, points):
+        self.reputation += points
